@@ -15,7 +15,7 @@ export type FacebookUser = {
 
 export const fetchUsers = async db => {
   const query = {
-    text: 'SELECT * FROM cl.users'
+    text: 'SELECT * FROM users'
   }
   const { rows } = await db.query(query)
   return rows
@@ -23,7 +23,7 @@ export const fetchUsers = async db => {
 
 export const fetchUser = async (db, id): Promise<User> => {
   const query = {
-    text: `SELECT * FROM cl.users WHERE "id"='${id}' LIMIT 1`
+    text: `SELECT * FROM users WHERE "id"='${id}' LIMIT 1`
   }
   const { rows } = await db.query(query)
   return rows[0]
@@ -32,7 +32,7 @@ export const fetchUser = async (db, id): Promise<User> => {
 export const createUserFromFacebook = async (db, user: FacebookUser): Promise<User> => {
   const { facebookId, name, email, photo } = user
   const query = {
-    text: `INSERT INTO cl.users("facebookId", "name", "email", "photo") 
+    text: `INSERT INTO users("facebookId", "name", "email", "photo") 
     values('${facebookId}', '${name}', '${email}', '${photo}')
     RETURNING *`
   }
@@ -42,14 +42,14 @@ export const createUserFromFacebook = async (db, user: FacebookUser): Promise<Us
 
 export const deleteUser = async (db, id): Promise<User> => {
   const query = {
-    text: `DELETE FROM cl.users WHERE "id"='${id}'`
+    text: `DELETE FROM users WHERE "id"='${id}'`
   }
   return await db.query(query)
 }
 
 const fetchUserByFacebookId = async (db, facebookId: string) => {
   const query = {
-    text: `SELECT * FROM cl.users WHERE "facebookId"='${facebookId}' LIMIT 1`
+    text: `SELECT * FROM users WHERE "facebookId"='${facebookId}' LIMIT 1`
   }
   const { rows } = await db.query(query)
   return rows[0]

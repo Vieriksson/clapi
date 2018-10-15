@@ -2,7 +2,7 @@ import * as expressJwt from 'express-jwt'
 import { config } from '../config'
 
 const devUser = {
-  id: '18',
+  id: '2',
   facebookId: '10215954879920806',
   name: 'Viktor Eriksson',
   email: 'me@viktoreriksson.se',

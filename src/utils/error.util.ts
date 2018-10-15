@@ -4,5 +4,5 @@ export const logErrors = (err, req, res, next) => {
 }
 
 export const handleErrors = (err, req, res, next) => {
-  res.status(err.status || 500).send()
+  res.status(err.status || 500).json(err.message)
 }
