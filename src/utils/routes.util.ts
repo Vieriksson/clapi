@@ -1,4 +1,4 @@
-export const safeRoute = fn => (req, res, next) =>
-  Promise.resolve(fn(req, res, next)).catch(err => {
+export const safeRoute = routeHandler => (req, res, next) =>
+  Promise.resolve(routeHandler(req, res, next)).catch(err => {
     next(err)
   })

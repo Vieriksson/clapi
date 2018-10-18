@@ -13,8 +13,8 @@ export const setupPassport = (passport: PassportStatic, db) => {
   passport.use(
     new FacebookTokenStrategy(
       {
-        clientID: config.facebookClientId,
-        clientSecret: config.facebookClientSecret
+        clientID: config.facebook.id,
+        clientSecret: config.facebook.secret
       },
       async (accessToken, refreshToken, profile, done) => {
         const facebookUser = {
