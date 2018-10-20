@@ -1,21 +1,15 @@
 import * as express from 'express'
-import {
-  createGroup,
-  deleteGroup,
-  fetchGroup,
-  fetchGroups,
-  updateGroup
-} from '../database/groups.db'
+import { GroupsDb } from '../database/groups/groups.db'
 import { safeRoute } from '../utils/routes.util'
 
-export const createGroupsRoutes = () => {
+export const createGroupsRoutes = (groupsDb: GroupsDb) => {
   const routes = express.Router()
 
   routes.get(
     '/',
     safeRoute(async (req, res) => {
       const { db, user } = req
-      const groups = await fetchGroups(db, user.id)
+      const groups = await groupsDb.fetchUserGroups(db, user.id)
       res.json(groups)
     })
   )
@@ -24,7 +18,7 @@ export const createGroupsRoutes = () => {
     '/:id',
     safeRoute(async (req, res) => {
       const { db, params } = req
-      const group = await fetchGroup(db, params.id)
+      const group = await groupsDb.fetchGroup(db, params.id)
       if (!group) {
         throw { status: 404, message: `Could not find group for id: ${params.id}` }
       }
@@ -36,7 +30,7 @@ export const createGroupsRoutes = () => {
     '/',
     safeRoute(async (req, res) => {
       const { db, user, body } = req
-      const group = await createGroup(db, user.id, body)
+      const group = await groupsDb.createGroup(db, user.id, body)
       res.json(group)
     })
   )
@@ -45,7 +39,7 @@ export const createGroupsRoutes = () => {
     '/:id',
     safeRoute(async (req, res) => {
       const { db, body, params } = req
-      const group = await updateGroup(db, params.id, body)
+      const group = await groupsDb.updateGroup(db, params.id, body)
       res.json(group)
     })
   )
@@ -54,7 +48,7 @@ export const createGroupsRoutes = () => {
     '/:id',
     safeRoute(async (req, res) => {
       const { db, params } = req
-      await deleteGroup(db, params.id)
+      await groupsDb.deleteGroup(db, params.id)
       res.status(200).send()
     })
   )

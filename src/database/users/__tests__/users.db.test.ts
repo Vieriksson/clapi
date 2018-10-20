@@ -1,7 +1,7 @@
 import { Client } from 'pg'
-import '../../config'
-import { createGuid } from '../../utils/misc.util'
-import { createUserFromFacebook, deleteUser, FacebookUser, fetchUser } from '../users.db'
+import '../../../config'
+import { createGuid } from '../../../utils/misc.util'
+import { FacebookUser, usersDb } from '../users.db'
 
 describe('user', () => {
   it('shoulda cruda woulda, but its to laaate', async () => {
@@ -15,15 +15,15 @@ describe('user', () => {
       photo: 'random-photo-url'
     }
 
-    const userId = (await createUserFromFacebook(db, newUser)).id
+    const userId = (await usersDb.createUserFromFacebook(db, newUser)).id
     expect(userId).toBeDefined()
 
-    const user = await fetchUser(db, userId)
+    const user = await usersDb.fetchUser(db, userId)
     expect(user.name).toBe(newUser.name)
 
-    await deleteUser(db, userId)
+    await usersDb.deleteUser(db, userId)
 
-    const deletedUser = await fetchUser(db, userId)
+    const deletedUser = await usersDb.fetchUser(db, userId)
     expect(deletedUser).toBeUndefined()
 
     await db.end()

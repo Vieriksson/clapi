@@ -1,15 +1,15 @@
 import * as express from 'express'
-import { fetchUser, fetchUsers } from '../database/users.db'
+import { UsersDb } from '../database/users/users.db'
 import { safeRoute } from '../utils/routes.util'
 
-export const createUserRoutes = () => {
+export const createUserRoutes = (usersDb: UsersDb) => {
   const routes = express.Router()
 
   routes.get(
     '/',
     safeRoute(async (req, res) => {
       const { db } = req
-      const users = await fetchUsers(db)
+      const users = await usersDb.fetchUsers(db)
       res.json(users)
     })
   )
@@ -18,7 +18,7 @@ export const createUserRoutes = () => {
     '/:id',
     safeRoute(async (req, res) => {
       const { db, params } = req
-      const user = await fetchUser(db, params.id)
+      const user = await usersDb.fetchUser(db, params.id)
       res.json(user)
     })
   )

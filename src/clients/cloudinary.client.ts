@@ -5,7 +5,7 @@ type CloudinaryResponse = {
   secure_url: string
 }
 
-export const uploadToCloudinary = async (buffer: Buffer) =>
+const uploadToCloudinary = async (buffer: Buffer) =>
   new Promise<CloudinaryResponse>((resolve, reject) => {
     cloudinary.v2.uploader
       .upload_stream((err, res: CloudinaryResponse) => {
@@ -18,7 +18,7 @@ export const uploadToCloudinary = async (buffer: Buffer) =>
       .end(buffer)
   })
 
-export const removeFromCloudinary = async (id: string) =>
+const removeFromCloudinary = async (id: string) =>
   new Promise((resolve, reject) => {
     cloudinary.v2.uploader.destroy(id, (err, res: CloudinaryResponse) => {
       if (err) {
@@ -28,3 +28,8 @@ export const removeFromCloudinary = async (id: string) =>
       }
     })
   })
+
+export const cloudinaryClient = {
+  uploadToCloudinary,
+  removeFromCloudinary
+}

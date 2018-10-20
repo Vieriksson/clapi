@@ -3,10 +3,15 @@ import * as cloudinary from 'cloudinary'
 import * as express from 'express'
 import * as passport from 'passport'
 import { Client } from 'pg'
+import { cloudinaryClient } from './clients/cloudinary.client'
 import { config } from './config'
+import { groupsDb } from './database/groups/groups.db'
+import { itemsDb } from './database/items/items.db'
+import { usersDb } from './database/users/users.db'
 import { createAuthRoutes } from './routes/auth.routes'
 import { createGroupsRoutes } from './routes/groups.routes'
 import { createImagesRoutes } from './routes/images.routes'
+import { createItemsRoutes } from './routes/items.routes'
 import { createUserRoutes } from './routes/users.routes'
 import { authenticate, fakeAuthenticate } from './utils/auth.util'
 import { handleErrors, logErrors } from './utils/error.util'
@@ -38,9 +43,10 @@ db.connect().then(() => {
     app.use(authenticate)
   }
 
-  app.use('/users', createUserRoutes())
-  app.use('/groups', createGroupsRoutes())
-  app.use('/images', createImagesRoutes())
+  app.use('/users', createUserRoutes(usersDb))
+  app.use('/groups', createGroupsRoutes(groupsDb))
+  app.use('/images', createImagesRoutes(cloudinaryClient))
+  app.use('/items', createItemsRoutes(itemsDb))
 
   app.use(logErrors)
   app.use(handleErrors)

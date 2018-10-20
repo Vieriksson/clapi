@@ -1,8 +1,8 @@
 import { Client } from 'pg'
-import '../../config'
-import { createGuid } from '../../utils/misc.util'
-import { createGroup, deleteGroup, fetchGroup, Group, updateGroup } from '../groups.db'
-import { createUserFromFacebook, deleteUser, FacebookUser } from '../users.db'
+import '../../../config'
+import { createGuid } from '../../../utils/misc.util'
+import { FacebookUser, usersDb } from '../../users/users.db'
+import { Group, groupsDb } from '../groups.db'
 
 describe('user', () => {
   it('shoulda cruda woulda', async () => {
@@ -22,19 +22,19 @@ describe('user', () => {
     }
     const updatedGroup = { ...newGroup, name: 'test-group-name-2' }
 
-    const userId = (await createUserFromFacebook(db, newUser)).id
+    const userId = (await usersDb.createUserFromFacebook(db, newUser)).id
 
-    const group = await createGroup(db, userId, newGroup)
+    const group = await groupsDb.createGroup(db, userId, newGroup)
     expect(group.name).toBe(newGroup.name)
 
-    const fetchedGroup = await fetchGroup(db, group.id)
+    const fetchedGroup = await groupsDb.fetchGroup(db, group.id)
     expect(fetchedGroup.name).toBe(newGroup.name)
 
-    const groupAfterUpdate = await updateGroup(db, group.id, updatedGroup)
+    const groupAfterUpdate = await groupsDb.updateGroup(db, group.id, updatedGroup)
     expect(groupAfterUpdate.name).toBe(updatedGroup.name)
 
-    await deleteGroup(db, group.id)
-    await deleteUser(db, userId)
+    await groupsDb.deleteGroup(db, group.id)
+    await usersDb.deleteUser(db, userId)
     await db.end()
   })
 })

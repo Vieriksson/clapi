@@ -1,7 +1,7 @@
 import { PassportStatic } from 'passport'
 import * as FacebookTokenStrategy from 'passport-facebook-token'
 import { config } from '../config'
-import { upsertFacebookUser } from '../database/users.db'
+import { usersDb } from '../database/users/users.db'
 
 export const setupPassport = (passport: PassportStatic, db) => {
   passport.serializeUser(function(user, done) {
@@ -24,7 +24,7 @@ export const setupPassport = (passport: PassportStatic, db) => {
           photo: profile.photos[0].value
         }
         try {
-          const user = await upsertFacebookUser(db, facebookUser)
+          const user = await usersDb.upsertFacebookUser(db, facebookUser)
           return done(null, user)
         } catch (err) {
           return done(err, null)
