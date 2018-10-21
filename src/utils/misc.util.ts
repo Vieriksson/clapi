@@ -6,3 +6,21 @@ export const createGuid = () => {
   }
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 }
+
+const stringToCamel = (str: string) => {
+  str = str.replace(/[-_\s]+(.)?/g, (_, ch) => (ch ? ch.toUpperCase() : ''))
+  return str.substr(0, 1).toLowerCase() + str.substr(1)
+}
+
+const objectToCamel = (obj: Object) =>
+  Object.keys(obj).reduce((tutti, prop) => {
+    tutti[stringToCamel(prop)] = obj[prop]
+    return tutti
+  }, {})
+
+export const toCamelCase = (input: Object | Object[]) => {
+  if (Array.isArray(input)) {
+    return input.map(obj => objectToCamel(obj))
+  }
+  return objectToCamel(input)
+}

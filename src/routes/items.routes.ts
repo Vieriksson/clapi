@@ -1,5 +1,6 @@
 import * as express from 'express'
-import { Item, ItemsDb } from '../database/items/items.db'
+import { ItemsDb } from '../database/items/items.db'
+import { Item } from '../database/items/items.types'
 import { safeRoute } from '../utils/routes.util'
 
 export const createItemsRoutes = (itemsDb: ItemsDb) => {
@@ -10,6 +11,16 @@ export const createItemsRoutes = (itemsDb: ItemsDb) => {
     safeRoute(async (req, res) => {
       const { db, user } = req
       const items = await itemsDb.getUserItems(db, user.id)
+      res.json(items)
+    })
+  )
+
+  routes.get(
+    '/filtered/:tags?',
+    safeRoute(async (req, res) => {
+      const { db, user, params } = req
+      const tags = params.tags ? params.tags.split(',') : []
+      const items = await itemsDb.getFilteredItems(db, user.id, tags)
       res.json(items)
     })
   )

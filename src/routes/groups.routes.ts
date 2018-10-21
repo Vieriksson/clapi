@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { GroupsDb } from '../database/groups/groups.db'
+import { toCamelCase } from '../utils/misc.util'
 import { safeRoute } from '../utils/routes.util'
 
 export const createGroupsRoutes = (groupsDb: GroupsDb) => {
@@ -10,7 +11,7 @@ export const createGroupsRoutes = (groupsDb: GroupsDb) => {
     safeRoute(async (req, res) => {
       const { db, user } = req
       const groups = await groupsDb.fetchUserGroups(db, user.id)
-      res.json(groups)
+      res.json(toCamelCase(groups))
     })
   )
 
@@ -22,7 +23,16 @@ export const createGroupsRoutes = (groupsDb: GroupsDb) => {
       if (!group) {
         throw { status: 404, message: `Could not find group for id: ${params.id}` }
       }
-      res.json(group)
+      res.json(toCamelCase(group))
+    })
+  )
+
+  routes.get(
+    '/:id/members',
+    safeRoute(async (req, res) => {
+      const { db, params } = req
+      const members = await groupsDb.fetchGroupMembers(db, params.id)
+      res.json(toCamelCase(members))
     })
   )
 

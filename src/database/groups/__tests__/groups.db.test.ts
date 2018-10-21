@@ -1,8 +1,10 @@
 import { Client } from 'pg'
 import '../../../config'
 import { createGuid } from '../../../utils/misc.util'
-import { FacebookUser, usersDb } from '../../users/users.db'
-import { Group, groupsDb } from '../groups.db'
+import { usersDb } from '../../users/users.db'
+import { FacebookUser } from '../../users/users.types'
+import { groupsDb } from '../groups.db'
+import { Group } from '../groups.types'
 
 describe('user', () => {
   it('shoulda cruda woulda', async () => {

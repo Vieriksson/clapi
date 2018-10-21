@@ -1,6 +1,7 @@
 import { Client } from 'pg'
 import '../../../config'
-import { Item, itemsDb } from '../items.db'
+import { itemsDb } from '../items.db'
+import { Item } from '../items.types'
 
 describe('item', () => {
   it('create and delete item', async () => {

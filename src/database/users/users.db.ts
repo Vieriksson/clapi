@@ -1,47 +1,27 @@
-import {
-  deleteUserQuery,
-  insertFacebookUserQuery,
-  selectUserByFacebookIdQuery,
-  selectUserQuery,
-  selectUsersQuery
-} from './users.queries'
-
-export type User = {
-  id: number
-  facebookId: string
-  name: string
-  email: string
-  photo: string
-}
-
-export type FacebookUser = {
-  facebookId: string
-  name: string
-  email: string
-  photo: string
-}
+import { userQuery } from './users.queries'
+import { FacebookUser, User } from './users.types'
 
 const fetchUsers = async db => {
-  const { rows } = await db.query(selectUsersQuery())
+  const { rows } = await db.query(userQuery.selectUsers())
   return rows
 }
 
 const fetchUser = async (db, id): Promise<User> => {
-  const { rows } = await db.query(selectUserQuery(id))
-  return rows[0]
-}
-
-const createUserFromFacebook = async (db, user: FacebookUser): Promise<User> => {
-  const { rows } = await db.query(insertFacebookUserQuery(user))
+  const { rows } = await db.query(userQuery.selectUser(id))
   return rows[0]
 }
 
 const deleteUser = async (db, id): Promise<User> => {
-  return await db.query(deleteUserQuery(id))
+  return await db.query(userQuery.deleteUser(id))
+}
+
+const createUserFromFacebook = async (db, user: FacebookUser): Promise<User> => {
+  const { rows } = await db.query(userQuery.insertFacebookUser(user))
+  return rows[0]
 }
 
 const fetchUserByFacebookId = async (db, facebookId: string) => {
-  const { rows } = await db.query(selectUserByFacebookIdQuery(facebookId))
+  const { rows } = await db.query(userQuery.selectUserByFacebookId(facebookId))
   return rows[0]
 }
 

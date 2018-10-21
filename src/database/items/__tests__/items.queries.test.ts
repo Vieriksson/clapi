@@ -1,4 +1,4 @@
-import { insertItemImagesQuery, insertItemQuery, insertItemTagsQuery } from '../items.queries'
+import { itemQuery } from '../items.queries'
 
 describe('createInsertItemQuery', () => {
   it('should create insert item query', () => {
@@ -7,9 +7,9 @@ describe('createInsertItemQuery', () => {
       description: 'random'
     } as any
 
-    const query = insertItemQuery(userId, item)
+    const query = itemQuery.insertItem(userId, item)
 
-    expect(query).toContain(`INSERT INTO items("userId", "description") VALUES`)
+    expect(query).toContain(`INSERT INTO items(user_id, description)`)
     expect(query).toContain(`('123', 'random')`)
   })
 })
@@ -19,9 +19,9 @@ describe('createInsertTagsQuery', () => {
     const itemId = 123
     const tags = [123, 456, 789]
 
-    const query = insertItemTagsQuery(itemId, tags)
+    const query = itemQuery.insertItemTags(itemId, tags)
 
-    expect(query).toContain(`INSERT INTO item_tags("itemId", "tagId") VALUES`)
+    expect(query).toContain(`INSERT INTO item_tags(item_id, tag_id)`)
     expect(query).toContain(`('123', '123'),`)
     expect(query).toContain(`('123', '456'),`)
     expect(query).toContain(`('123', '789')`)
@@ -33,9 +33,9 @@ describe('createInsertImagesQuery', () => {
     const itemId = 123
     const images = ['url1', 'url2', 'url3']
 
-    const query = insertItemImagesQuery(itemId, images)
+    const query = itemQuery.insertItemImages(itemId, images)
 
-    expect(query).toContain(`INSERT INTO item_images("itemId", "url") VALUES`)
+    expect(query).toContain(`INSERT INTO item_images(item_id, url)`)
     expect(query).toContain(`('123', 'url1'),`)
     expect(query).toContain(`('123', 'url2'),`)
     expect(query).toContain(`('123', 'url3')`)

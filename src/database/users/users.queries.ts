@@ -1,16 +1,32 @@
-import { FacebookUser } from './users.db'
+import { FacebookUser } from './users.types'
 
-export const selectUsersQuery = () => 'SELECT * FROM users'
+const selectUsers = () => `
+  SELECT * FROM users`
 
-export const selectUserQuery = (id: number) => `SELECT * FROM users WHERE "id"='${id}' LIMIT 1`
+const selectUser = (id: number) => `
+  SELECT * FROM users 
+  WHERE id='${id}' 
+  LIMIT 1`
 
-export const insertFacebookUserQuery = (
+const insertFacebookUser = (
   user: FacebookUser
-) => `INSERT INTO users("facebookId", "name", "email", "photo") 
-values('${user.facebookId}', '${user.name}', '${user.email}', '${user.photo}')
+) => `INSERT INTO users(facebook_id, name, email, photo) 
+VALUES ('${user.facebookId}', '${user.name}', '${user.email}', '${user.photo}')
 RETURNING *`
 
-export const deleteUserQuery = (id: number) => `DELETE FROM users WHERE "id"='${id}'`
+const deleteUser = (id: number) => `
+  DELETE FROM users 
+  WHERE id='${id}'`
 
-export const selectUserByFacebookIdQuery = (facebookId: string) =>
-  `SELECT * FROM users WHERE "facebookId"='${facebookId}' LIMIT 1`
+const selectUserByFacebookId = (facebookId: string) => `
+  SELECT * FROM users 
+  WHERE facebook_id='${facebookId}' 
+  LIMIT 1`
+
+export const userQuery = {
+  selectUsers,
+  selectUser,
+  insertFacebookUser,
+  deleteUser,
+  selectUserByFacebookId
+}

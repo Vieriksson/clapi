@@ -1,41 +1,34 @@
 import { Client } from 'pg'
-import {
-  createGroupQuery,
-  deleteGroupQuery,
-  selectGroupQuery,
-  selectUserGroupsQuery,
-  updateGroupQuery
-} from './groups.queries'
-
-export type Group = {
-  id?: number
-  name: string
-  description: string
-  photo: string
-}
+import { groupQuery } from './groups.queries'
+import { Group } from './groups.types'
 
 const fetchUserGroups = async (db: Client, userId: number) => {
-  const { rows } = await db.query(selectUserGroupsQuery(userId))
+  const { rows } = await db.query(groupQuery.selectUserGroups(userId))
   return rows
 }
 
 const fetchGroup = async (db: Client, groupId: number) => {
-  const { rows } = await db.query(selectGroupQuery(groupId))
+  const { rows } = await db.query(groupQuery.selectGroup(groupId))
   return rows[0]
 }
 
+const fetchGroupMembers = async (db, groupId: number): Promise<Group[]> => {
+  const { rows } = await db.query(groupQuery.selectGroupMembers(groupId))
+  return rows
+}
+
 const createGroup = async (db, userId: number, group: Group): Promise<Group> => {
-  const { rows } = await db.query(createGroupQuery(userId, group))
+  const { rows } = await db.query(groupQuery.insertGroup(userId, group))
   return rows[0]
 }
 
 const updateGroup = async (db, groupId: number, group: Group): Promise<Group> => {
-  const { rows } = await db.query(updateGroupQuery(groupId, group))
+  const { rows } = await db.query(groupQuery.updateGroup(groupId, group))
   return rows[0]
 }
 
 const deleteGroup = async (db, groupId: number): Promise<void> => {
-  await db.query(deleteGroupQuery(groupId))
+  await db.query(groupQuery.deleteGroup(groupId))
 }
 
 export const groupsDb = {
@@ -43,7 +36,8 @@ export const groupsDb = {
   fetchGroup,
   createGroup,
   updateGroup,
-  deleteGroup
+  deleteGroup,
+  fetchGroupMembers
 }
 
 export type GroupsDb = typeof groupsDb
