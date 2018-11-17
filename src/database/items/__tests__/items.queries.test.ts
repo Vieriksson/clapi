@@ -17,14 +17,14 @@ describe('createInsertItemQuery', () => {
 describe('createInsertTagsQuery', () => {
   it('should create tag query for each tag', () => {
     const itemId = 123
-    const tags = [123, 456, 789]
+    const tags = ['MEN', 'CASUAL', 'SPREZZ']
 
     const query = itemQuery.insertItemTags(itemId, tags)
 
-    expect(query).toContain(`INSERT INTO item_tags(item_id, tag_id)`)
-    expect(query).toContain(`('123', '123'),`)
-    expect(query).toContain(`('123', '456'),`)
-    expect(query).toContain(`('123', '789')`)
+    expect(query).toContain(`INSERT INTO item_tags(item_id, tag)`)
+    expect(query).toContain(`('123', 'MEN'),`)
+    expect(query).toContain(`('123', 'CASUAL'),`)
+    expect(query).toContain(`('123', 'SPREZZ')`)
   })
 })
 

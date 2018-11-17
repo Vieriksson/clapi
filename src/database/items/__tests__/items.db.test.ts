@@ -11,7 +11,7 @@ describe('item', () => {
     const item: Item = {
       description: 'random',
       images: ['image1', 'image2'],
-      tags: [1]
+      tags: ['MEN']
     }
 
     const itemId = await itemsDb.createItem(db, 1, item)

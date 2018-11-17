@@ -7,11 +7,13 @@ import { cloudinaryClient } from './clients/cloudinary.client'
 import { config } from './config'
 import { groupsDb } from './database/groups/groups.db'
 import { itemsDb } from './database/items/items.db'
+import { tagsDb } from './database/tags/tags.db'
 import { usersDb } from './database/users/users.db'
 import { createAuthRoutes } from './routes/auth.routes'
 import { createGroupsRoutes } from './routes/groups.routes'
 import { createImagesRoutes } from './routes/images.routes'
 import { createItemsRoutes } from './routes/items.routes'
+import { createTagsRoutes } from './routes/tags.routes'
 import { createUserRoutes } from './routes/users.routes'
 import { authenticate, fakeAuthenticate } from './utils/auth.util'
 import { handleErrors, logErrors } from './utils/error.util'
@@ -47,6 +49,7 @@ db.connect().then(() => {
   app.use('/groups', createGroupsRoutes(groupsDb))
   app.use('/images', createImagesRoutes(cloudinaryClient))
   app.use('/items', createItemsRoutes(itemsDb))
+  app.use('/tags', createTagsRoutes(tagsDb))
 
   app.use(logErrors)
   app.use(handleErrors)

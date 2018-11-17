@@ -4,5 +4,5 @@ export type Item = {
   description: string
   groupIds?: number[]
   images: string[]
-  tags: number[]
+  tags: string[]
 }

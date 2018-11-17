@@ -34,18 +34,25 @@ export const createItemsRoutes = (itemsDb: ItemsDb) => {
     })
   )
 
-  routes.post(
+  routes.put(
     '/',
     safeRoute(async (req, res) => {
       const { db, user } = req
       const item: Item = req.body
+
       if (!item.tags || item.tags.length === 0) {
         throw { status: 404, message: `Must include at least one tag` }
       }
       if (!item.images || item.images.length === 0) {
         throw { status: 404, message: `Must include at least one image` }
       }
-      const itemId = await itemsDb.createItem(db, user.id, item)
+
+      let itemId
+      if (item.id) {
+        itemId = await itemsDb.updateItem(db, item)
+      } else {
+        itemId = await itemsDb.createItem(db, user.id, item)
+      }
       res.json(itemId)
     })
   )
