@@ -23,8 +23,7 @@ const app = express()
 app.use(bodyParser.json())
 const port = process.env.PORT || 3000
 const db = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true
+  connectionString: process.env.DATABASE_URL + '?ssl=true'
 })
 
 cloudinary.config({
