@@ -13,7 +13,7 @@
     "compile": "tsc --watch",
     "dev": "nodemon dist/server.js",
     "build": "tsc",
-    "postinstall": "npm run migrate up && npm run build",
+    "postinstall": "SSL_DATABASE_URL=$DATABASE_URL?ssl=true node-pg-migrate up --database-url-var=SSL_DATABASE_URL && npm run build",
     "start": "node dist/server.js"
   },
   "dependencies": {
